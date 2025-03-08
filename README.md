@@ -21,4 +21,22 @@
 - Flask-CORS
 
 ---
+
+## 开发模式
+### 启动 Flask 后端
+
+在项目根目录下运行 Flask 后端：
+
+```bash
+python backend/app.py
+```
+### 启动 React 前端
+在 frontend 目录下运行 React 开发服务器：
+
+```bash
+npm run dev
+```
+
+---
+
 ![效果](https://github.com/h0uu0h/Kazoo/blob/main/test.gif)
