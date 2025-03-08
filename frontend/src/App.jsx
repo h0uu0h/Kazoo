@@ -36,7 +36,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                 </Routes>
             </div>
-            <Flex align="center" justify="">
+            <Flex align="center" justify="center" >
                 <a
                     href="https://ant-design.antgroup.com/components/flex-cn"
                     target="_blank">
