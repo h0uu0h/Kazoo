@@ -1,11 +1,9 @@
 import "react";
-import { Layout, Menu } from "antd";
-import {
-    HomeOutlined,
-    UserOutlined,
-    SettingOutlined
-} from "@ant-design/icons";
+import { Layout, Menu, Flex } from "antd";
+import { HomeOutlined, UserOutlined, SettingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import reactLogo from "/eye2.svg";
+import viteLogo from "/eye1.svg";
 
 const { Header } = Layout;
 
@@ -19,7 +17,24 @@ const Navbar = () => {
                     fontSize: "20px",
                     marginRight: "24px",
                 }}>
-                O※O※
+                <Flex align="center" justify="center" gap={6}>
+                    <a
+                        href="https://ant-design.antgroup.com/components/flex-cn"
+                        target="_blank">
+                        <img
+                            src={viteLogo}
+                            className="logo navbar-logo"
+                            alt="eye1 logo"
+                        />
+                    </a>
+                    <a href="https://react.dev" target="_blank">
+                        <img
+                            src={reactLogo}
+                            className="logo navbar-logo"
+                            alt="eye2 logo"
+                        />
+                    </a>
+                </Flex>
             </div>
             <Menu
                 theme="light"

@@ -1,5 +1,5 @@
 import "react";
-import CameraFeed from "../components/CameraFeed";
+import CameraFeed from "./CameraFeed";
 import { useState, useEffect } from "react";
 import reactLogo from "/eye2.svg";
 import viteLogo from "/eye1.svg";

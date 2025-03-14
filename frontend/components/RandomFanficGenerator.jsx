@@ -103,7 +103,7 @@ const RandomFanficGenerator = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>同人文随机事件生成器</h1>
-            <Flex vertical gap={16}>
+            <Flex horizontal justify="space-evenly">
                 <div>
                     <Typography.Title level={5}>角色1</Typography.Title>
                     <Input
@@ -122,28 +122,6 @@ const RandomFanficGenerator = () => {
                     />
                 </div>
             </Flex>
-            <div className={styles.inputGroup}>
-                <label className={styles.label}>
-                    CP1 名字：
-                    <input
-                        type="text"
-                        value={cp1}
-                        onChange={(e) => setCp1(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
-            </div>
-            <div className={styles.inputGroup}>
-                <label className={styles.label}>
-                    CP2 名字：
-                    <input
-                        type="text"
-                        value={cp2}
-                        onChange={(e) => setCp2(e.target.value)}
-                        className={styles.input}
-                    />
-                </label>
-            </div>
             <button onClick={generateFanfic} className={styles.button}>
                 生成随机事件
             </button>
@@ -151,40 +129,46 @@ const RandomFanficGenerator = () => {
             {result && (
                 <div className={styles.resultContainer}>
                     <h2 className={styles.resultTitle}>生成结果</h2>
-                    <h3 className={styles.subTitle}>
-                        {result.cp1.name} 的属性：
-                    </h3>
-                    <ul className={styles.list}>
-                        <li className={styles.listItem}>
-                            性格：{result.cp1.personality}
-                        </li>
-                        <li className={styles.listItem}>
-                            身份：{result.cp1.identity}
-                        </li>
-                        <li className={styles.listItem}>
-                            能力：{result.cp1.ability}
-                        </li>
-                        <li className={styles.listItem}>
-                            外貌：{result.cp1.appearance}
-                        </li>
-                    </ul>
-                    <h3 className={styles.subTitle}>
-                        {result.cp2.name} 的属性：
-                    </h3>
-                    <ul className={styles.list}>
-                        <li className={styles.listItem}>
-                            性格：{result.cp2.personality}
-                        </li>
-                        <li className={styles.listItem}>
-                            身份：{result.cp2.identity}
-                        </li>
-                        <li className={styles.listItem}>
-                            能力：{result.cp2.ability}
-                        </li>
-                        <li className={styles.listItem}>
-                            外貌：{result.cp2.appearance}
-                        </li>
-                    </ul>
+                    <Flex horizontal justify="space-evenly">
+                        <div>
+                            <h3 className={styles.subTitle}>
+                                {result.cp1.name} 的属性：
+                            </h3>
+                            <ul className={styles.list}>
+                                <li className={styles.listItem}>
+                                    性格：{result.cp1.personality}
+                                </li>
+                                <li className={styles.listItem}>
+                                    身份：{result.cp1.identity}
+                                </li>
+                                <li className={styles.listItem}>
+                                    能力：{result.cp1.ability}
+                                </li>
+                                <li className={styles.listItem}>
+                                    外貌：{result.cp1.appearance}
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className={styles.subTitle}>
+                                {result.cp2.name} 的属性：
+                            </h3>
+                            <ul className={styles.list}>
+                                <li className={styles.listItem}>
+                                    性格：{result.cp2.personality}
+                                </li>
+                                <li className={styles.listItem}>
+                                    身份：{result.cp2.identity}
+                                </li>
+                                <li className={styles.listItem}>
+                                    能力：{result.cp2.ability}
+                                </li>
+                                <li className={styles.listItem}>
+                                    外貌：{result.cp2.appearance}
+                                </li>
+                            </ul>
+                        </div>
+                    </Flex>
                     <h3 className={styles.subTitle}>
                         CP 关系：{result.relationship}
                     </h3>

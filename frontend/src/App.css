@@ -26,6 +26,16 @@
   height: 12em;
 }
 
+.logo.navbar-logo {
+  height: 0em;
+  padding: 2px;
+}
+
+.logo.navbar-logo:hover {
+  height: 3em;
+  filter: drop-shadow(0 0 2em #EB5B56aa);
+}
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #EB5B56aa);
 }

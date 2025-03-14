@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import { Layout } from "antd";
 import Home from "../components/Home";
 import Quiz from "../components/Quiz";
-import RandomFanficGenerator from "../components/RandomFanficGenerator";
+// import RandomFanficGenerator from "../components/RandomFanficGenerator";
+import ImageComposer from "../components/ImageComposer";
 import Navbar from "../components/Navbar";
 
 const { Content } = Layout;
@@ -22,7 +23,7 @@ function App() {
                                 <Route path="/about" element={<Quiz />} />
                                 <Route
                                     path="/RandomGenerator"
-                                    element={<RandomFanficGenerator />}
+                                    element={<ImageComposer />}
                                 />
                             </Routes>
                     </div>
