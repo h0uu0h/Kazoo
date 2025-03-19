@@ -48,6 +48,7 @@ export default function QuizApp() {
     });
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showResult, setShowResult] = useState(false);
+    const [showCover, setShowCover] = useState(true); // 新增状态，控制封面显示
 
     useEffect(() => {
         fetch("../src/assets/quiz.csv")
@@ -75,7 +76,11 @@ export default function QuizApp() {
                                 },
                             ];
                             options = options.sort(() => Math.random() - 0.5);
-                            return { question: row["title"], options };
+                            return {
+                                question: row["title"],
+                                keyword: row["kw"],
+                                options,
+                            };
                         });
                         setQuestions(parsedQuestions);
                     },
@@ -83,6 +88,30 @@ export default function QuizApp() {
             });
     }, []);
 
+    // 处理关键字变色
+    const HighlightText = ({ text, keyword }) => {
+        if (!keyword) return text;
+
+        const keywords = keyword.split("/").map((kw) => kw.trim());
+        const parts = text.split(new RegExp(`(${keywords.join("|")})`, "gi"));
+
+        return parts.map((part, index) =>
+            keywords.includes(part) ? (
+                <span
+                    key={index}
+                    className={styles.highlight}
+                    style={{
+                        color: highlightColors[
+                            Math.floor(Math.random() * highlightColors.length)
+                        ],
+                    }}>
+                    {part}
+                </span>
+            ) : (
+                part
+            )
+        );
+    };
     const handleAnswer = (category, point) => {
         setScores((prevScores) => ({
             ...prevScores,
@@ -123,17 +152,66 @@ export default function QuizApp() {
     };
     // 按钮颜色映射
     const btnColors = {
-        運命の使者: ["#fd8700", "#f4c408"], // 图片路径
+        運命の使者: ["#fd8700", "#f4c408"],
         秘めた知者: ["#b7a5f3", "#92dcff"],
         孤独な悪役: ["#9fa6ec", "#7ca4df"],
         癒しい天使: ["#fd631d", "#fd8700"],
         面白味担当: ["#fc4d88", "#ff749e"],
         無愛想剣士: ["#7497eb", "#8dbbf1"],
     };
+    const highlightColors = [
+        "#fd8700",
+        "#f4c408",
+        "#b7a5f3",
+        "#92dcff",
+        "#9fa6ec",
+        "#7ca4df",
+        "#fd631d",
+        "#fd8700",
+        "#fc4d88",
+        "#ff749e",
+        "#7497eb",
+        "#8dbbf1",
+    ];
+
+    const handleStartQuiz = () => {
+        setShowCover(false); // 隐藏封面，开始答题
+    };
 
     return (
         <div className={styles.container}>
-            {questions.length === 0 ? (
+            {showCover ? (
+                <motion.div
+                    className={styles.cover}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}>
+                    <Flex
+                        horizontal
+                        justify="space-between"
+                        align="center"
+                        style={{ width: "100%" }}>
+                        <img
+                            className={styles.logo_img}
+                            src="../src/assets/rhymoss.svg"
+                        />
+                        <p className={styles.wt2}>二次創作小説検索サイト</p>
+                    </Flex>
+                    <FancyButton
+                        className={styles.startButton}
+                        onClick={handleStartQuiz}
+                        btnColor={
+                            highlightColors[
+                                Math.floor(
+                                    Math.random() * highlightColors.length
+                                )
+                            ]
+                        }>
+                        <h3>スタート</h3>
+                    </FancyButton>
+                </motion.div>
+            ) : questions.length === 0 ? (
                 <Spin size="large" />
             ) : !showResult ? (
                 <Card size="small" className={styles.quizCard}>
@@ -146,7 +224,10 @@ export default function QuizApp() {
                     </Flex>
                     <Flex vertical gap={16}>
                         <h2 className={styles.title}>
-                            {questions[currentQuestion].question}
+                            <HighlightText
+                                text={questions[currentQuestion].question}
+                                keyword={questions[currentQuestion].keyword}
+                            />
                         </h2>
                         <Flex vertical gap={12}>
                             {questions[currentQuestion].options.map(
@@ -167,7 +248,7 @@ export default function QuizApp() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -10 }}
                                                 transition={{ duration: 0.3 }}
-                                                style={{ textAlign: "center" }}>
+                                                style={{ textAlign: "left" }}>
                                                 {String.fromCharCode(
                                                     65 + index
                                                 )}
