@@ -1,35 +1,21 @@
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import { Layout } from "antd";
-import Home from "../components/Home";
-import Quiz from "../components/Quiz";
-// import RandomFanficGenerator from "../components/RandomFanficGenerator";
-import ImageComposer from "../components/ImageComposer";
-import Navbar from "../components/Navbar";
-
-const { Content } = Layout;
-
+import CameraFeed from "../components/CameraFeed";
 function App() {
     return (
-        <>
-            <Layout>
-                <Navbar />
-                <Content style={{ padding: "0 50px", marginTop: 64 , width: "100%"}}>
-                    <div
-                        className="site-layout-content"
-                        style={{ padding: 24, minHeight: "100vh" }}>
-                            <Routes>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/about" element={<Quiz />} />
-                                <Route
-                                    path="/RandomGenerator"
-                                    element={<ImageComposer />}
-                                />
-                            </Routes>
-                    </div>
-                </Content>
-            </Layout>
-        </>
+        <div className="app-container">
+            {/* 摄像头组件 */}
+            {/* <div className="camera-wrapper"> */}
+                <CameraFeed />
+            {/* </div> */}
+
+            {/* 覆盖内容区域 */}
+            <div className="content-overlay">
+                <div className="content-container">
+                    {/* 这里放你的其他内容 */}
+                    {/* 例如：<ControlsPanel /> */}
+                </div>
+            </div>
+        </div>
     );
 }
 
