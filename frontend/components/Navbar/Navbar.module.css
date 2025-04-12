@@ -1,0 +1,91 @@
+/* Navbar.module.css */
+
+/* 基础logo样式 - 注意使用更具体的类名避免全局污染 */
+
+/* 导航栏专用logo样式 */
+.navbarLogo {
+    height: 1.5em;
+    display: block;
+    will-change: filter;
+    transition: filter 300ms;
+}
+
+/* 悬停效果 */
+.navbarLogo:hover {
+    filter: drop-shadow(0 0 1em #EB5B56aa);
+}
+
+
+/* 旋转动画 */
+@keyframes logoSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 减少运动偏好设置 */
+@media (prefers-reduced-motion: no-preference) {
+    .navbarLogo {
+        animation: logoSpin infinite 20s linear;
+    }
+
+    /* 第二个链接的logo */
+    .secondLink .navbarLogo {
+        animation: logoSpin infinite 20s linear;
+    }
+}
+
+.volumnButton {
+    width: 2.8em;
+    height: 2.8em;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playButton {
+    width: 4.2em;
+    height: 4.2em;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.playButton:hover {
+    filter: drop-shadow(0 0 0.2em #ffffffaa);
+}
+
+.iconButton {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.iconButton:hover {
+    background: #000000;
+    border-color: #000000;
+}
+
+.iconButton:hover .icon {
+    filter: brightness(0) invert(1);
+}
+
+.icon {
+    width: 1em;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}

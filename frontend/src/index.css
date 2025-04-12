@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'MiSans';
+  src: url('/fonts/MiSans-Variable.ttf') format('truetype');
+  font-weight: 100 700;
+  font-style: normal;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -27,6 +34,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Open Sans', sans-serif;
   /* 移除flex布局 */
   display: block;
   /* 添加以下规则 */
