@@ -1,0 +1,32 @@
+/* 简化版黑白风格 range 输入条 */
+.valueBar {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 4px;
+    background: #000;
+    /* 黑色轨道背景 */
+    border-radius: 2px;
+    outline: none;
+}
+
+/* 统一滑块样式 */
+.valueBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    /* 白色滑块 */
+    border: 1px solid #000;
+    /* 黑色边框 */
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.valueBar::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+}

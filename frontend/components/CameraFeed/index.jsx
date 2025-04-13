@@ -1,15 +1,29 @@
 import { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
+import audioEngine from "../../src/utils/audioEngine";
 
-// 连接到 Flask 服务器
 const socket = io("http://localhost:5000");
+
+let audioCtx = null; // 👈 全局 AudioContext
 
 const CameraFeed = () => {
     const [streamError, setStreamError] = useState(false);
     const imgRef = useRef(null);
+    const [isAudioReady, setIsAudioReady] = useState(false);
+
+    // 用户点击页面后启用 AudioContext
+    const initAudioContext = () => {
+        if (!audioCtx) {
+            audioEngine.resumeIfSuspended();
+            const AudioContext =
+                window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            setIsAudioReady(true);
+            console.log("✅ AudioContext 已激活");
+        }
+    };
 
     useEffect(() => {
-        // 监听图像加载错误
         const imgElement = imgRef.current;
         const handleError = () => setStreamError(true);
 
@@ -17,40 +31,23 @@ const CameraFeed = () => {
             imgElement.addEventListener("error", handleError);
         }
 
-        // 监听 "fist_detected" 事件
-        socket.on("left_fist_detected", () => {
-            console.log("前端收到握拳事件，播放音频！");
-            leftPlayAudio();
-        });
-
-        socket.on("right_fist_detected", () => {
-            console.log("前端收到握拳事件，播放音频！");
-            rightPlayAudio();
+        // ✅ 监听左手的位置频率事件
+        socket.on("left_hand_position", ({ frequency }) => {
+            if (isAudioReady) {
+                audioEngine.playKazooTone(frequency);
+            }
         });
 
         return () => {
             if (imgElement) {
                 imgElement.removeEventListener("error", handleError);
             }
-            socket.off("left_fist_detected");
-            socket.off("right_fist_detected");
+            socket.off("left_hand_position");
         };
-    }, []);
-
-    // 播放音频
-    const leftPlayAudio = () => {
-        const audio = new Audio("/blow.wav");
-        audio.play().catch((error) => console.error("音频播放失败：", error));
-    };
-
-    const rightPlayAudio = () => {
-        const audio = new Audio("/fart.wav");
-        audio.play().catch((error) => console.error("音频播放失败：", error));
-    };
+    }, [isAudioReady]);
 
     return (
-        <div className="camera-wrapper">
-            {/* 视频流图像 */}
+        <div className="camera-wrapper" onClick={initAudioContext}>
             <img
                 ref={imgRef}
                 src="http://127.0.0.1:5000/video_feed"
@@ -67,7 +64,6 @@ const CameraFeed = () => {
                 }}
             />
 
-            {/* 缺省图 - 当视频流加载失败时显示 */}
             {streamError && (
                 <img
                     src="../src/bg.png"
@@ -81,9 +77,26 @@ const CameraFeed = () => {
                         top: "50%",
                         transform: "translate(-50%, -50%)",
                         objectFit: "cover",
-                        cursor: "pointer", // 鼠标悬停时显示手型
+                        cursor: "pointer",
                     }}
                 />
+            )}
+
+            {!isAudioReady && (
+                <div
+                    style={{
+                        position: "absolute",
+                        bottom: "20px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        background: "rgba(0,0,0,0.6)",
+                        padding: "10px 20px",
+                        borderRadius: "12px",
+                        color: "white",
+                        cursor: "pointer",
+                    }}>
+                    🔊 点击页面启用声音
+                </div>
             )}
         </div>
     );
