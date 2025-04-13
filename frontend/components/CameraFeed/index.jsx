@@ -31,12 +31,12 @@ const CameraFeed = () => {
             imgElement.addEventListener("error", handleError);
         }
         // 监听 "fist_detected" 事件
-        socket.on("left_fist_detected", () => {
+        socket.on("Left_fist_detected", () => {
             console.log("前端收到握拳事件，播放音频！");
             leftPlayAudio();
         });
 
-        socket.on("right_fist_detected", () => {
+        socket.on("Right_fist_detected", () => {
             console.log("前端收到握拳事件，播放音频！");
             rightPlayAudio();
         });
@@ -67,8 +67,8 @@ const CameraFeed = () => {
             if (imgElement) {
                 imgElement.removeEventListener("error", handleError);
             }
-            socket.off("left_fist_detected");
-            socket.off("right_fist_detected");
+            socket.off("Left_fist_detected");
+            socket.off("Right_fist_detected");
             socket.off("left_hand_position");
         };
     }, [isAudioReady]);
