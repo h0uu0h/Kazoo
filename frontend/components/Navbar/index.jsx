@@ -1,21 +1,19 @@
-import "react";
-import { Layout, Flex, Progress } from "antd";
+import { Layout, Flex } from "antd";
 import reactLogo from "/eye2.svg";
 import viteLogo from "/eye1.svg";
 import styles from "./Navbar.module.css";
 import musicIcon from "../../src/icon/music.svg";
 import settingIcon from "../../src/icon/setting.svg";
 import uploadIcon from "../../src/icon/upload.svg";
-import volumeIcon from "../../src/icon/volume.svg";
-import playIcon from "../../src/icon/play.svg";
+import MusicControl from "./MusicControl";
 
 const { Header } = Layout;
 
 const Navbar = () => {
     // 示例歌曲数据
     const currentSong = {
-        name: "Example Song Name",
-        progress: 30, // 进度百分比
+        name: "Anhe Bridge",
+        src: "/src/assets/music/Anhe Bridge.mp3",
     };
 
     return (
@@ -44,7 +42,6 @@ const Navbar = () => {
                                 src={viteLogo}
                                 className={styles.navbarLogo}
                                 alt="eye1 logo"
-                                style={{}}
                             />
                         </a>
                         <a
@@ -55,15 +52,8 @@ const Navbar = () => {
                                 src={reactLogo}
                                 className={styles.navbarLogo}
                                 alt="eye2 logo"
-                                style={{}}
                             />
                         </a>
-                        {/* <img
-                            src={reactLogo}
-                            alt="Logo"
-                            style={{ height: 24 }}
-                        />
-                        <img src={viteLogo} alt="Logo" style={{ height: 24 }} /> */}
                     </Flex>
                     <div
                         style={{
@@ -82,48 +72,19 @@ const Navbar = () => {
                     </div>
                 </Flex>
 
-                {/* 中间：歌曲进度条 */}
-                <Flex
-                    align="center"
-                    gap={16}
-                    style={{
-                        flex: 1,
-                        maxWidth: 600,
-                        padding: "0 24px",
-                    }}>
-                    {/* 播放按钮 */}
-                    <button className={styles.playButton}>
-                        <img width="100%" height="100%" src={playIcon}></img>
-                    </button>
-
-                    {/* 进度条 */}
-                    <div style={{ flex: 1 }}>
-                        <Progress
-                            percent={currentSong.progress}
-                            showInfo={false}
-                            strokeColor="#fff"
-                            trailColor="#555"
-                        />
-                    </div>
-
-                    {/* 音量按钮 */}
-                    <button className={styles.volumnButton}>
-                        <img width="100%" height="100%" src={volumeIcon}></img>
-                    </button>
-                </Flex>
+                {/* 中间：音乐控制组件 */}
+                <MusicControl audioSrc={currentSong.src} />
 
                 {/* 右侧：三个按钮 */}
                 <Flex align="center" gap={16}>
-                    {" "}
-                    {/* 减小gap值让按钮更紧凑 */}
                     <button className={styles.iconButton}>
-                        <img src={musicIcon} className={styles.icon} />
+                        <img src={musicIcon} className={styles.icon} alt="Music" />
                     </button>
                     <button className={styles.iconButton}>
-                        <img src={uploadIcon} className={styles.icon} />
+                        <img src={uploadIcon} className={styles.icon} alt="Upload" />
                     </button>
                     <button className={styles.iconButton}>
-                        <img src={settingIcon} className={styles.icon} />
+                        <img src={settingIcon} className={styles.icon} alt="Settings" />
                     </button>
                 </Flex>
             </Flex>
