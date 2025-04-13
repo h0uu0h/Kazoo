@@ -39,7 +39,7 @@ def is_fist(hand_landmarks):
 
 def generate_frames():
     """视频流生成器，包含多人手部追踪逻辑"""
-    hand_states = {}    # {hand_id: (last_trigger_time, last_x, last_y)}
+    hand_states = {}    # {hand_id: (last_trigger_time, last_x, last_y, hand_type)}
     hand_id_counter = 0
     cooldown = 0.1      # 冷却时间（秒）
     tracking_threshold = 50  # 追踪匹配阈值（像素）
@@ -63,12 +63,15 @@ def generate_frames():
                 cx = int(wrist.x * frame.shape[1])
                 cy = int(wrist.y * frame.shape[0])
                 
+                # 确定手部类型（左/右）
+                hand_type = "left" if "Left" in handedness.classification[0].label else "right"
+                
                 # 手部匹配逻辑
                 matched_id = None
                 min_dist = float('inf')
-                for hid, (last_time, last_x, last_y) in hand_states.items():
+                for hid, (last_time, last_x, last_y, last_type) in hand_states.items():
                     dist = np.sqrt((cx - last_x)**2 + (cy - last_y)**2)
-                    if dist < tracking_threshold and dist < min_dist:
+                    if dist < tracking_threshold and dist < min_dist and hand_type == last_type:
                         min_dist = dist
                         matched_id = hid
 
@@ -79,33 +82,41 @@ def generate_frames():
                 else:
                     hand_id = matched_id
 
-                # 记录当前手部位置
-                current_hands[hand_id] = (cx, cy)
+                # 记录当前手部位置和类型
+                current_hands[hand_id] = (cx, cy, hand_type)
                 
                 # 绘制手部关键点
                 mp_drawing.draw_landmarks(
                     frame, landmarks, mp_hands.HAND_CONNECTIONS)
+                
+                # 如果是左手，发送位置信息
+                if hand_type == "left":
+                    # 标准化y位置 (0-1范围，1表示屏幕顶部)
+                    normalized_y = wrist.y
+                    # 映射到音高范围 (例如 220Hz-880Hz, A3-A5)
+                    frequency = 110 + (440 - 110) * (1 - normalized_y)
+                    socketio.emit('left_hand_position', {
+                        'y': normalized_y,
+                        'frequency': frequency
+                    })
 
                 # 握拳检测与事件触发
                 if is_fist(landmarks):
                     now = time.time()
-                    last_trigger = hand_states.get(hand_id, (0, 0, 0))[0]
+                    last_trigger = hand_states.get(hand_id, (0, 0, 0, ''))[0]
                     
                     if now - last_trigger > cooldown:
-                        # 确定手部类型（左/右）
-                        hand_type = "left" if "Left" in handedness.classification[0].label else "right"
-                        
                         # 发送SocketIO事件
                         socketio.emit(f'{hand_type}_fist_detected')
                         print(f"触发{hand_type}手事件 ID: {hand_id}")
                         
-                        # 更新状态（触发时间 + 当前位置）
-                        hand_states[hand_id] = (now, cx, cy)
+                        # 更新状态（触发时间 + 当前位置 + 手类型）
+                        hand_states[hand_id] = (now, cx, cy, hand_type)
                 else:
                     # 更新位置但保留最后触发时间
                     if hand_id in hand_states:
-                        last_time, _, _ = hand_states[hand_id]
-                        hand_states[hand_id] = (last_time, cx, cy)
+                        last_time, _, _, last_type = hand_states[hand_id]
+                        hand_states[hand_id] = (last_time, cx, cy, last_type)
 
         # 清理过期手部状态（2秒未更新）
         current_time = time.time()
