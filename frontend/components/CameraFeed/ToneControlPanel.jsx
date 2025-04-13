@@ -9,6 +9,12 @@ export default function ToneControlPanel({
     setNoiseLevel,
     flutterAmount,
     setFlutterAmount,
+    minFrequency,
+    setMinFrequency,
+    maxFrequency,
+    setMaxFrequency,
+    playInterval,
+    setPlayInterval,
 }) {
     return (
         <div
@@ -50,6 +56,44 @@ export default function ToneControlPanel({
                 step="0.001"
                 value={flutterAmount}
                 onChange={(e) => setFlutterAmount(parseFloat(e.target.value))}
+            />
+            <br />
+
+            <label>最低频率(Hz): {minFrequency}</label>
+            <input
+                className={styles.valueBar}
+                type="range"
+                min="55" // A1
+                max="440" // A4
+                step="1"
+                value={minFrequency}
+                onChange={(e) => setMinFrequency(parseInt(e.target.value))}
+            />
+
+            <br />
+
+            <label>最高频率(Hz): {maxFrequency}</label>
+            <input
+                className={styles.valueBar}
+                type="range"
+                min="220" // A3
+                max="1760" // A6
+                step="1"
+                value={maxFrequency}
+                onChange={(e) => setMaxFrequency(parseInt(e.target.value))}
+            />
+
+            <br />
+
+            <label>播放间隔(秒): {playInterval.toFixed(2)}</label>
+            <input
+                className={styles.valueBar}
+                type="range"
+                min="0.05"
+                max="0.5"
+                step="0.01"
+                value={playInterval}
+                onChange={(e) => setPlayInterval(parseFloat(e.target.value))}
             />
         </div>
     );

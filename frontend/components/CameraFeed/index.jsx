@@ -32,9 +32,25 @@ const CameraFeed = () => {
         }
 
         // ✅ 监听左手的位置频率事件
-        socket.on("left_hand_position", ({ frequency }) => {
+        socket.on("left_hand_position", ({ y }) => {
             if (isAudioReady) {
-                audioEngine.playKazooTone(frequency);
+                // 从audioEngine获取当前频率范围设置
+                const minFreq = audioEngine.params.minFrequency || 110;
+                const maxFreq = audioEngine.params.maxFrequency || 880;
+
+                // 计算频率 (y值越高，频率越高)
+                const frequency = minFreq + (maxFreq - minFreq) * (1 - y);
+
+                // 确保频率有效
+                if (
+                    isFinite(frequency) &&
+                    frequency > 20 &&
+                    frequency < 20000
+                ) {
+                    audioEngine.playKazooTone(frequency);
+                } else {
+                    console.warn("Invalid frequency calculated:", frequency);
+                }
             }
         });
 

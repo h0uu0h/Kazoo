@@ -93,11 +93,10 @@ def generate_frames():
                 if hand_type == "left":
                     # 标准化y位置 (0-1范围，1表示屏幕顶部)
                     normalized_y = wrist.y
-                    # 映射到音高范围 (例如 220Hz-880Hz, A3-A5)
-                    frequency = 110 + (440 - 110) * (1 - normalized_y)
+                    # 频率将由前端根据设置的范围计算
                     socketio.emit('left_hand_position', {
                         'y': normalized_y,
-                        'frequency': frequency
+                        'rawY': wrist.y  # 发送原始Y值，让前端计算频率
                     })
 
                 # 握拳检测与事件触发

@@ -7,7 +7,11 @@ class AudioEngine {
             brightness: 1.0,
             noiseLevel: 0.02,
             flutterAmount: 0.01,
+            minFrequency: 110,    // A2 (低频限制)
+            maxFrequency: 880,   // A5 (高频限制)
+            playInterval: 0.1     // 播放最小间隔(秒)
         };
+        this.lastPlayTime = 0;
     }
 
     setToneParams(params) {
@@ -15,18 +19,37 @@ class AudioEngine {
     }
 
     playKazooTone(frequency, duration = 0.5, volume = 0.12) {
+        // 验证输入参数
+        if (!isFinite(frequency) || !isFinite(duration) || !isFinite(volume)) {
+            console.warn('Invalid audio parameters:', { frequency, duration, volume });
+            return;
+        }
+
+        // 应用参数限制
+        frequency = Math.max(20, Math.min(20000, frequency));
+        duration = Math.max(0.01, Math.min(2, duration));
+        volume = Math.max(0, Math.min(1, volume));
+
+        // 检查播放间隔
+        if (this.params.playInterval > 0.06) {
+            const now = this.audioCtx.currentTime;
+            if (now - this.lastPlayTime < this.params.playInterval) {
+                return;
+            }
+            this.lastPlayTime = now;
+        }
         this.resumeIfSuspended();
         const ctx = this.audioCtx;
         const { brightness, noiseLevel, flutterAmount } = this.params;
 
-        // 1. 自定义波形（根据 brightness 调节谐波衰减）
+        // 1. 自定义波形
         const numHarmonics = 20;
         const real = new Float32Array(numHarmonics + 1);
         const imag = new Float32Array(numHarmonics + 1);
         real[0] = 0;
         for (let i = 1; i <= numHarmonics; i++) {
             if (i % 2 === 1) {
-                real[i] = 1 / (i ** (1.0 + brightness)); // 越亮，高频越强
+                real[i] = 1 / (i ** (1.0 + brightness));
             }
         }
         const kazooWave = ctx.createPeriodicWave(real, imag);
