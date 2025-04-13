@@ -120,7 +120,9 @@ def generate_frames():
 
                 # 记录当前手部位置
                 current_hands[hand_id] = (cx, cy)
-
+                # 后续判断可考虑 左右手类型是否变化
+                # current_hands[hand_id] = (cx, cy, label)
+                
                 # 绘制手部关键点
                 # mp_drawing.draw_landmarks(frame, landmarks, mp_hands.HAND_CONNECTIONS)
                 if hand_assignments.get(hand_id) == "red":
@@ -145,6 +147,16 @@ def generate_frames():
                         mp_drawing.DrawingSpec(color=(255, 0, 0), thickness=2),
                     )
                     role = hand_assignments[hand_id] 
+                
+                # 如果是左手，发送位置信息
+                if label == "Left":
+                    # 标准化y位置 (0-1范围，1表示屏幕顶部)
+                    normalized_y = wrist.y
+                    # 频率将由前端根据设置的范围计算
+                    socketio.emit('left_hand_position', {
+                        'y': normalized_y,
+                        'rawY': wrist.y  # 发送原始Y值，让前端计算频率
+                    })
 
                 # 握拳检测与事件触发
                 if is_fist_detected:

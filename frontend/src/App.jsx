@@ -1,26 +1,41 @@
 import "./App.css";
-import CameraFeed from "../components/CameraFeed";
+import CameraFeed from "../components/CameraFeed/index";
 import Navbar from "../components/Navbar/index";
-// import CameraControlPanel from "../components/CameraControlPanel/index";
+
 function App() {
     return (
         <>
             <Navbar />
             <div className="app-container">
-                {/* 摄像头组件 */}
-                {/* <div className="camera-wrapper"> */}
                 <CameraFeed />
-                {/* </div> */}
-
-                {/* 覆盖内容区域 */}
                 <div className="content-overlay">
-                    <div className="content-container">
-                        {/* <CameraControlPanel /> */}
+                    <div
+                        className="content-container"
+                        style={{
+                            top: "64px",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                        }}>
+                        {/* <ToneControlPanel
+                            brightness={brightness}
+                            setBrightness={setBrightness}
+                            noiseLevel={noiseLevel}
+                            setNoiseLevel={setNoiseLevel}
+                            flutterAmount={flutterAmount}
+                            setFlutterAmount={setFlutterAmount}
+                            minFrequency={minFrequency}
+                            setMinFrequency={setMinFrequency}
+                            maxFrequency={maxFrequency}
+                            setMaxFrequency={setMaxFrequency}
+                            playInterval={playInterval}
+                            setPlayInterval={setPlayInterval}
+                        /> */}
                     </div>
                 </div>
             </div>
         </>
     );
 }
-
 export default App;
